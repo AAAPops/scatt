@@ -1,0 +1,17 @@
+Source: scatt
+Section: tools
+Priority: optional
+Maintainer: Nikolay N. Zorin <zorin@swemel.ru>
+Build-Depends: debhelper (>= 11), cmake (>= 3), libc6-dev (>= 2.28-10)
+Standards-Version: 4.3.0
+Homepage: http://swemel.ru
+Vcs-Browser: http://salsa.swemel.grp/z20/bsign
+Vcs-Git: http://salsa.swemel.grp/z20/bsign.git
+
+Package: socatt
+Architecture: any
+Section: tools
+Priority: optional
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: little functional of cats ('socat'\'netcat')
+ only use socks as cats ('socat'\'netcat')

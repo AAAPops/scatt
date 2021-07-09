@@ -1,0 +1,18 @@
+#!/usr/bin/make -f
+
+# export DH_VERBOSE = 1
+# export DH_OPTIONS=-v
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+
+DESTDIR = debian/socatt
+PREFIX = $(DESTDIR)/opt/swemel
+PREFIX_BIN = $(PREFIX)/Psrv
+
+
+%:
+	dh $@
+
+# configure
+override_dh_auto_configure:
+	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/swemel/Psrv/ src
