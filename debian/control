@@ -8,7 +8,7 @@ Homepage: http://swemel.ru
 Vcs-Browser: http://salsa.swemel.grp/z20/bsign
 Vcs-Git: http://salsa.swemel.grp/z20/bsign.git
 
-Package: socatt
+Package: scatt
 Architecture: any
 Section: tools
 Priority: optional
