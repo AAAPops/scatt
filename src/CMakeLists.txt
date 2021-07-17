@@ -20,3 +20,6 @@ set(SRC
 add_executable(${PROJECT_NAME} ${SRC})
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
+
+
+#add_executable(scatt-stdin-to-ip  scatt-stdin-to-ip.c  tcp_connection.c  log.c  utils.c)

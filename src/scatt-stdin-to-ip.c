@@ -12,8 +12,8 @@
 
 #include "tcp_connection.h"
 #include "log.h"
+#include "version.h"
 
-#define VERSION    "0.1a"
 
 #define IN_BUFF_SZ  1024
 #define OUT_BUFF_SZ 1024
@@ -25,7 +25,7 @@ void print_usage(char *util_name) {
     fprintf(stderr, "Ver.%s \n", VERSION);
     fprintf(stderr, "Usage: %s [-t] [-D] ip:port \n", util_name);
     fprintf(stderr, "\t -t - timeout in sec. Default 5s \n");
-    fprintf(stderr, "\t -D - Debug level [-1,0..5]. -1 quiet mode \n");
+    fprintf(stderr, "\t -d - Debug level [0..5] \n");
     fprintf(stderr, "\t ip:port - address to connect to \n");
 }
 
@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
 
     // Set default
     int timeout = TIMEOUT_SEC;
-    int debug_level = LOG_INFO;
+    int debug_level = -1;
 
     if( argc == 1) {
         print_usage(argv[0]);
@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
 
     int c;
     opterr = 0;
-    while ((c = getopt (argc, argv, "ht:D:")) != -1) {
+    while ((c = getopt (argc, argv, "ht:d:")) != -1) {
         switch (c) {
             case 'h':
                 print_usage(argv[0]);
@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
             case 't':
                 timeout = (int) strtol(optarg, NULL, 10) * 1000;
                 break;
-            case 'D':
+            case 'd':
                 debug_level = (int) strtol(optarg, NULL, 10);
                 break;
             default:
@@ -70,10 +70,11 @@ int main(int argc, char **argv) {
     }
 
 
-    if( debug_level == -1 )
-        log_set_quiet(1);
-    else
+    log_set_quiet(1);
+    if( debug_level >= 0 ) {
+        log_set_quiet(0);
         log_set_level(debug_level);
+    }
 
 
     ret = argToIpAddr(argv[argc-1], &ipaddr, &ipport);

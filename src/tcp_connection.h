@@ -30,10 +30,14 @@ int read_tcp_data(int peer_fd, void *buffer, size_t count);
 
 // Client
 int connect_to_srv(const char *addr_str, const char *port_str);
-int connect_to_unix_socket(const char *socket_path);
 void client_close(int client_fd);
 
 // Misc
 int argToIpAddr(const char *argument, char **ipaddr, char **ipport);
+
+
+// Unix-socket client/server
+int unix_sock_server (char *socket_path);
+int connect_to_unix_socket(const char *socket_path);
 
 #endif

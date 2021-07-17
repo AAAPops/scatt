@@ -320,3 +320,60 @@ int argToIpAddr(const char *argument, char **ipaddr, char **ipport) {
     return 0;
 }
 
+
+/**********************
+ * Unix socket Server *
+ *********************/
+
+/**
+ * @param socket_path is string argument like "/tmp/srv.sock"
+ * @return fd >0 if success
+ * @return -1 if error
+ */
+int unix_sock_server (char *socket_path)
+{
+    int server_sock, ret;
+    int backlog = 10;
+    struct sockaddr_un server_sockaddr;
+
+    /**************************************/
+    /* Create a UNIX domain stream socket */
+    /**************************************/
+    server_sock = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (server_sock == -1){
+        log_fatal("socket(): [%m]");
+        return -1;
+    }
+
+    /***************************************/
+    /* Set up the UNIX sockaddr structure  */
+    /* by using AF_UNIX for the family and */
+    /* giving it a filepath to bind to.    */
+    /*                                     */
+    /* Unlink the file so the bind will    */
+    /* succeed, then bind to that file.    */
+    /***************************************/
+    server_sockaddr.sun_family = AF_UNIX;
+    strcpy(server_sockaddr.sun_path, socket_path);
+    unsigned int len = sizeof(server_sockaddr);
+
+    unlink(socket_path);
+    ret = bind(server_sock, (struct sockaddr *) &server_sockaddr, len);
+    if (ret == -1){
+        log_fatal("bind(): [%m]");
+        return -1;
+    }
+
+    /*********************************/
+    /* Listen for any client sockets */
+    /*********************************/
+    ret = listen(server_sock, backlog);
+    if (ret == -1){
+        log_fatal("bind(): [%m]");
+        close(server_sock);
+        return -1;
+    }
+    log_info("Server waiting for a client...");
+
+    return server_sock;
+}
