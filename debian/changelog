@@ -1,5 +1,6 @@
-scatt (0.1.swm.1) z20; urgency=medium
+scatt (0.1b.swm.1) z20; urgency=medium
 
   * Цирконизация (дебианизация) пакета
+  * обновление кода инструментов
 
- -- Nikolay N. Zorin <zorin@swemel.ru>  Fri, 09 Jul 2021 13:35:22 +0300
+ -- Nikolay N. Zorin <zorin@swemel.ru>  Sun, 18 Jul 2021 21:09:22 +0300
