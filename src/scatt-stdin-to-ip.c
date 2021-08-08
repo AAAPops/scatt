@@ -144,6 +144,7 @@ int main(int argc, char **argv) {
             // if nbytes > 0 !!!
             write(STDOUT_FILENO, out_buff, nbytes);
             log_trace("Write %zu to stdout", nbytes);
+            break;
 
         } else {  // POLLERR | POLLHUP | etc.
             log_warn("peer closed connection");
@@ -155,7 +156,7 @@ int main(int argc, char **argv) {
     retcode = 0;
 err:
     if (srv_fd > 0)
-        client_close(srv_fd);
+        close(srv_fd);
 
     return retcode;
 }
