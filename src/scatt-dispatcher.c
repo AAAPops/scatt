@@ -78,17 +78,14 @@ void free_clients_by_timeout(int timeout);
  */
 void handle_signals(int sig)
 {
-    log_info("Caught signal %d\n", sig);
+    fprintf(stdout, "Caught signal %d\n", sig);
 
-    killpg(0, SIGQUIT);
+    killpg(0, SIGHUP);
 
     /*Do not let zombies alive(wait for all the child to finish)
      * with this the parent know that the child has finished successfully*/
     //while( wait(NULL) != -1 );
-    while(wait(NULL) != -1 || errno == EINTR);
-
-
-    kill(getpid(), SIGQUIT);
+    //while(wait(NULL) != -1 || errno == EINTR);
 }
 
 
@@ -108,8 +105,8 @@ int main(int argc, char **argv)
     struct sockaddr_un client_sockaddr;
     unsigned int len = sizeof(client_sockaddr);
 
-    //signal(SIGINT,  handle_signals);
-    //signal(SIGTERM, handle_signals);
+    signal(SIGINT,  handle_signals);
+    signal(SIGTERM, handle_signals);
 
     /************************************/
     /*     Set defaults                 */
