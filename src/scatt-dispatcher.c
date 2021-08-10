@@ -339,7 +339,7 @@ int main(int argc, char **argv)
 
 void free_client(int idx) {
     log_debug("   free_client(%d) !!!", idx);
-    int ret;
+    //int ret;
 
     if( client[idx].fd > 0)
         close(client[idx].fd);

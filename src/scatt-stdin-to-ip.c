@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
 
     uint8_t in_buff[IN_BUFF_SZ];
     uint8_t out_buff[OUT_BUFF_SZ];
-    size_t nbytes;
+    ssize_t nbytes;
 
     // Set default
     int timeout = TIMEOUT_SEC;

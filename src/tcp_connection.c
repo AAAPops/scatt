@@ -22,8 +22,7 @@ int srv_start(const char *addr_str, int port)
 {
     int srv_fd;
     struct sockaddr_in servaddr;
-    socklen_t peer_addr_size;
-
+    //socklen_t peer_addr_size;
 
     struct in_addr inp;
     inet_aton(addr_str, &inp);
@@ -94,7 +93,7 @@ int write_tcp_data(int peer_fd, void* buff_ptr, size_t buff_len) {
     //    fwrite(buff_ptr, buff_size, 1, file_ptr);
 
     // send the buffer to client
-    int n_bytes = send(peer_fd, buff_ptr, buff_len, MSG_NOSIGNAL);
+    size_t n_bytes = send(peer_fd, buff_ptr, buff_len, MSG_NOSIGNAL);
     if( n_bytes != buff_len ) {
         log_fatal("TCP: Not able to sent %d bytes", buff_len);
         return -1;
@@ -123,7 +122,7 @@ int read_tcp_data(int peer_fd, void *buffer, size_t total_to_read) {
 
     struct pollfd pfds;
     int ret;
-    size_t n_bytes;
+    ssize_t n_bytes;
     size_t offset = 0;
     size_t left_to_read = total_to_read;
     int iter = 0;
