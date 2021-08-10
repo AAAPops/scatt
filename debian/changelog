@@ -1,3 +1,11 @@
+scatt (0.1c.swm.3) z20; urgency=medium
+
+  * Решен тикет #45529, когда не все запросы получали ответы
+  * Убраны предупреждения компилятороа этапа сборки
+
+ -- Urovsky Roman <urovsky@swemel.ru>  Tue 10 Aug 2021 01:08:37 PM MSK
+
+
 scatt (0.1b.swm.1) z20; urgency=medium
 
   * Цирконизация (дебианизация) пакета
