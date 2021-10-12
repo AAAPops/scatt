@@ -95,6 +95,7 @@ int main(int argc, char **argv)
     int nbytes;
     int server_fd;
     struct timeval tv;
+    struct ucred cr;
 
     char exec_arg_str[EXEC_ARGS_LEN];
     int  exec_argc;
@@ -136,6 +137,8 @@ int main(int argc, char **argv)
         log_set_level(debug_level);
     }
 
+    uid_t start_uid = getuid();
+    log_trace("Run as user: %d", start_uid);
 
     server_fd = unix_sock_server(sock_path);
     if( server_fd < 0 ){
@@ -200,23 +203,24 @@ int main(int argc, char **argv)
             int newsockfd = accept(server_fd, (struct sockaddr *) &client_sockaddr, &len);
             if (newsockfd <= 0) {
                 log_warn("accept(): {%m]");
+                goto continue_there;
             } else {
                 log_info("Accept new client (fd = %d)", newsockfd);
 
 
-                struct ucred cr;
-                len = sizeof(struct ucred);
-                if(getsockopt(newsockfd, SOL_SOCKET, SO_PEERCRED, &cr, &len) < 0){
-                    fprintf(stderr, "error: peercred failed on %s: %s\n", argv[0], strerror(errno));
-                    return -1;
+                unsigned int ucred_sz = sizeof(struct ucred);
+                if( getsockopt(newsockfd, SOL_SOCKET, SO_PEERCRED, &cr, &ucred_sz) < 0 ) {
+                    log_warn("getsockop() [%m]");
+                    log_warn("Close connection #%d due to access violation", newsockfd);
+                    close(newsockfd);
+                    goto continue_there;
                 }
-                /* TODO resolve name or map to proc entry */
-                printf("%s: %u:%u  pid=%u\n", argv[0], cr.uid, cr.gid, cr.pid);
 
-                if(  cr.uid != 1000 ) {
-                    ret = close(newsockfd);
-                    fprintf(stderr, "Close connection #%d due to access violation \n", newsockfd);
-                    goto out1;
+                log_debug("user: %u:%u  pid=%u", cr.uid, cr.gid, cr.pid);
+                if(  start_uid != cr.uid ) {
+                    close(newsockfd);
+                    log_warn("Close connection #%d due to access violation", newsockfd);
+                    goto continue_there;
                 }
 
 
@@ -248,6 +252,7 @@ int main(int argc, char **argv)
                 }
             }
         }
+        continue_there:
 
 
         // ----------- Client connection closed by peer -----------
@@ -262,7 +267,6 @@ int main(int argc, char **argv)
         }
         */
 
-        out1:
         // ----------- Get data from client and exec bash script -----------
         for ( idx = 0; idx < CLIENTS_MAX; idx++ ) {
             if( pollfds[clntfd(idx)].revents & POLLIN ) {
