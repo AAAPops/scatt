@@ -6,6 +6,7 @@
  * ( 2021-07-17 07:36:03 )
  */
 
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -17,7 +18,6 @@
 #include <sys/time.h>
 #include <errno.h>
 
-
 #include "tcp_connection.h"
 #include "remap_pipe.h"
 #include "log.h"
@@ -25,7 +25,6 @@
 
 /*  Temporary defines!!!  */
 #define SOCKET_PATH  "/tmp/dispatcher.sock"
-
 
 #define MEMZERO(x)	memset(&(x), 0, sizeof (x));
 
@@ -204,6 +203,23 @@ int main(int argc, char **argv)
             } else {
                 log_info("Accept new client (fd = %d)", newsockfd);
 
+
+                struct ucred cr;
+                len = sizeof(struct ucred);
+                if(getsockopt(newsockfd, SOL_SOCKET, SO_PEERCRED, &cr, &len) < 0){
+                    fprintf(stderr, "error: peercred failed on %s: %s\n", argv[0], strerror(errno));
+                    return -1;
+                }
+                /* TODO resolve name or map to proc entry */
+                printf("%s: %u:%u  pid=%u\n", argv[0], cr.uid, cr.gid, cr.pid);
+
+                if(  cr.uid != 1000 ) {
+                    ret = close(newsockfd);
+                    fprintf(stderr, "Close connection #%d due to access violation \n", newsockfd);
+                    goto out1;
+                }
+
+
                 for (idx = 0; idx < CLIENTS_MAX; idx++) {
                     if (client[idx].fd == 0) {
                         log_debug("Client[%d] is free. Work with it", idx);
@@ -246,7 +262,7 @@ int main(int argc, char **argv)
         }
         */
 
-
+        out1:
         // ----------- Get data from client and exec bash script -----------
         for ( idx = 0; idx < CLIENTS_MAX; idx++ ) {
             if( pollfds[clntfd(idx)].revents & POLLIN ) {
