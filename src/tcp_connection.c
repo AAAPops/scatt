@@ -8,6 +8,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <arpa/inet.h>
+#include <sys/stat.h>
 
 #include "log.h"
 #include "tcp_connection.h"
@@ -362,6 +363,10 @@ int unix_sock_server (char *socket_path)
         log_fatal("bind(): [%m]");
         return -1;
     }
+
+    ret = chmod(socket_path, 0600);
+    if( ret != 0 )
+        log_warn("chmod(): [%m]");
 
     /*********************************/
     /* Listen for any client sockets */
