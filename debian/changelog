@@ -1,3 +1,9 @@
+scatt (0.1c.swm.4) unstable; urgency=medium
+
+  * Cmake changed (added scatt-cdrw-helper to install) 
+
+ -- S.Trufanov <trufanov@swemel.ru>  Thu, 21 Oct 2021 11:29:09 +0300
+
 scatt (0.1c.swm.3) z20; urgency=medium
 
   * Решен тикет #45529, когда не все запросы получали ответы
