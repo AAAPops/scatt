@@ -28,6 +28,7 @@ add_executable(scatt-cdrw-helper  scatt-cdrw-helper.c
         utils.c)
 target_compile_options(scatt-cdrw-helper  PUBLIC   -Wall -Wextra)
 
+install(TARGETS scatt-cdrw-helper RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 #add_executable(scatt-stdin-to-ip  scatt-stdin-to-ip.c  tcp_connection.c  log.c  utils.c)
 #target_compile_options(scatt-stdin-to-ip  PUBLIC   -Wall -Wextra)

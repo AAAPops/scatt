@@ -6,6 +6,7 @@
 
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <sys/un.h>
 #include <arpa/inet.h>
 #include <sys/stat.h>
@@ -367,6 +368,7 @@ int unix_sock_server (char *socket_path)
     ret = chmod(socket_path, 0600);
     if( ret != 0 )
         log_warn("chmod(): [%m]");
+
 
     /*********************************/
     /* Listen for any client sockets */

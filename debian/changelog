@@ -1,3 +1,16 @@
+scatt (0.1.5.swm.1) z20; urgency=medium
+
+  * Внесены улучшаюшие исправления
+  * Корректировка версий - теперь версия пакета и инструмента будет совпадать
+
+ -- Nikolay N. Zorin <zorin@swemel.ru>  Tue, 26 Oct 2021 09:52:37 +0300
+
+scatt (0.1c.swm.4) unstable; urgency=medium
+
+  * Cmake changed (added scatt-cdrw-helper to install) 
+
+ -- S.Trufanov <trufanov@swemel.ru>  Thu, 21 Oct 2021 11:29:09 +0300
+
 scatt (0.1c.swm.3) z20; urgency=medium
 
   * Решен тикет #45529, когда не все запросы получали ответы

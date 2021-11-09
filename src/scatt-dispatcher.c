@@ -220,11 +220,14 @@ int main(int argc, char **argv)
                     goto continue_there;
                 }
 
-                log_debug("user: %u:%u  pid=%u", cr.uid, cr.gid, cr.pid);
+
                 if(  start_uid != cr.uid ) {
+                    log_debug("Process uid %u != connection uid %u", start_uid, cr.uid);
                     close(newsockfd);
                     log_warn("Close connection #%d due to access violation", newsockfd);
                     goto continue_there;
+                } else {
+                    log_debug("Process uid %u == connection uid %u", start_uid, cr.uid);
                 }
 
 
