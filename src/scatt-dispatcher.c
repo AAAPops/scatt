@@ -42,7 +42,11 @@ const char *script_list[] = {"get-device-perm.sh",
                              "get-srv-time.sh",
                              "get-user-resolution.sh",
                              "sshfs-run.sh",
-                             "aux1", NULL};
+                             "webcam-setup.sh",
+                             "aux1.sh",
+                             "aux2.sh",
+                             "aux3.sh",
+                             NULL};
 
 struct new_client {
     int fd;
