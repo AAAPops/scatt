@@ -1,3 +1,9 @@
+scatt (0.1.7.swm.1) z20; urgency=medium
+
+  * Цитата: git log в помощь!
+
+ -- Nikolay N. Zorin <zorin@swemel.ru>  Fri, 12 Nov 2021 15:57:34 +0300
+
 scatt (0.1.5.swm.1) z20; urgency=medium
 
   * Внесены улучшаюшие исправления
