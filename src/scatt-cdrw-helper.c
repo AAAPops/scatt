@@ -113,12 +113,14 @@ int main(int argc, char **argv) {
 
 
     char *usock_path =  parse_usock_path(argv[argc-1]);
+    if( usock_path == NULL )
+        return -1;
 
     while(1)
     {
         usock_fd = connect_to_unix_socket(usock_path);
         if (usock_fd < 0) {
-            log_fatal("Not able to connect to unix socket '%s'", usock_path);
+            log_warn("Not able to connect to unix socket '%s'", usock_path);
             sleep(SLEEP_SEC);
             continue;
         }

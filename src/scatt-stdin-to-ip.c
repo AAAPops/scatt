@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdint.h>
 #include <unistd.h>
 #include <poll.h>
@@ -40,6 +41,7 @@ int main(int argc, char **argv) {
     uint8_t in_buff[IN_BUFF_SZ];
     uint8_t out_buff[OUT_BUFF_SZ];
     ssize_t nbytes;
+    char *endptr = NULL;
 
     // Set default
     int timeout = TIMEOUT_SEC;
@@ -58,10 +60,20 @@ int main(int argc, char **argv) {
                 print_usage(argv[0]);
                 return -1;
             case 't':
-                timeout = (int) strtol(optarg, NULL, 10) * 1000;
+                timeout = (int) strtol(optarg, &endptr, 10);
+                if( strlen(endptr) != 0 || timeout < 0 || timeout > 1000) {
+                    fprintf(stderr, "A problem with parameter 'timeout'\n");
+                    return -1;
+                }
+                timeout *= 1000;
                 break;
             case 'd':
-                debug_level = (int) strtol(optarg, NULL, 10);
+                debug_level = (int) strtol(optarg, &endptr, 10);
+                if( strlen(endptr) != 0 || debug_level < LOG_TRACE
+                                        || debug_level > LOG_FATAL ) {
+                    fprintf(stderr, "A problem with parameter 'Debug level'\n");
+                    return -1;
+                }
                 break;
             default:
                 print_usage(argv[0]);

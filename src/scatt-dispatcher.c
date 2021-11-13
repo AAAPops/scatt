@@ -42,7 +42,7 @@ const char *script_list[] = {"get-device-perm.sh",
                              "get-srv-time.sh",
                              "get-user-resolution.sh",
                              "sshfs-run.sh",
-                             "webcam-setup.sh",
+                             "get-webcam-resolution.sh",
                              "aux1.sh",
                              "aux2.sh",
                              "aux3.sh",
@@ -286,6 +286,12 @@ int main(int argc, char **argv)
                     free_client(idx);
                     continue;
                 }
+                if( nbytes <= 1 ) {
+                    log_warn("Get Exec script name = 0. Skip the request!");
+                    free_client(idx);
+                    continue;
+                }
+
                 exec_arg_str[nbytes - 1] = '\0';
                 log_debug("exec_arg_str: '%s'", exec_arg_str);
 
@@ -459,6 +465,8 @@ int prepare_exec_datum(char *tmp_str, int *argc, char **argv) {
 int parse_argv(int argc, char **argv, int *timeout,
                int *debug_level, char *sockpath)
 {
+    char *endptr = NULL;
+
     if( argc == 1) {
         print_usage(argv[0]);
         return -1;
@@ -473,15 +481,16 @@ int parse_argv(int argc, char **argv, int *timeout,
                 print_usage(argv[0]);
                 return -1;
             case 't':
-                *timeout = (int) strtol(optarg, NULL, 10);
-                if( *timeout < 0 || *timeout > 1000) {
+                *timeout = (int) strtol(optarg, &endptr, 10);
+                if( strlen(endptr) != 0 || *timeout < 0 || *timeout > 1000) {
                     fprintf(stderr, "A problem with parameter 'timeout'\n");
                     return -1;
                 }
                 break;
             case 'd':
-                *debug_level = (int) strtol(optarg, NULL, 10);
-                if( *debug_level < LOG_TRACE || *debug_level > LOG_FATAL ) {
+                *debug_level = (int) strtol(optarg, &endptr, 10);
+                if( strlen(endptr) != 0 || *debug_level < LOG_TRACE
+                                        || *debug_level > LOG_FATAL ) {
                     fprintf(stderr, "A problem with parameter 'Debug level'\n");
                     return -1;
                 }
