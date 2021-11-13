@@ -1,8 +1,8 @@
-scatt (0.1.7.swm.1) z20; urgency=medium
+scatt (0.1.9.swm.1) z20; urgency=medium
 
-  * Цитата: git log в помощь!
+  * Решены мелкие тикеты  #46906, #46907 и #46908
 
- -- Nikolay N. Zorin <zorin@swemel.ru>  Fri, 12 Nov 2021 15:57:34 +0300
+ -- Roman Urovsky <urovsky@swemel.ru>  Sat 13 Nov 2021 07:58:03 PM MSK
 
 scatt (0.1.5.swm.1) z20; urgency=medium
 
